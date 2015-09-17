@@ -1,0 +1,81 @@
+version '1.0-SNAPSHOT'
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    springBootVersion = '1.2.5.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+war {
+    baseName = "spring-boot-skeleton"
+    webInf { from 'web'}
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+
+    // Spring Boot
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    compile"org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+
+    // Test
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile "net.javacrumbs.json-unit:json-unit:1.6.1"
+    testCompile "net.javacrumbs.json-unit:json-unit-fluent:1.6.1"
+    testCompile "org.assertj:assertj-core:3.1.0"
+
+    // H2
+    compile "com.h2database:h2:1.4.188"
+
+    // javax.validation
+    compile "javax.validation:validation-api:1.1.0.Final"
+    compile "com.google.code.findbugs:jsr305:3.0.0"
+
+    // javax.inject
+    compile "javax.inject:javax.inject:1"
+
+    // servlet jsp jstl
+    providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+    compile "javax.servlet:jstl:1.2"
+    providedCompile "javax.servlet.jsp:jsp-api:2.2"
+    providedRuntime "org.apache.tomcat.embed:tomcat-embed-jasper"
+
+    // utils
+    compile "org.projectlombok:lombok:1.16.4"
+    compile "com.google.guava:guava:18.0"
+
+    // json
+    compile "com.google.code.gson:gson:2.3.1"
+
+    // tuples
+    compile "org.javatuples:javatuples:1.2"
+}
