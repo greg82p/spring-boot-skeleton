@@ -1,13 +1,9 @@
 plugins {
     id 'org.springframework.boot' version '2.0.1.RELEASE'
     id 'java'
-    id 'war'
 }
 
 version '1.0-SNAPSHOT'
-
-//apply plugin: 'idea'
-//apply plugin: 'war'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -21,16 +17,7 @@ repositories {
     jcenter()
 }
 
-war {
-    baseName = "spring-boot-skeleton"
-    webInf { from 'web'}
-}
-
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-configurations {
-    providedRuntime
-}
 
 dependencies {
 
@@ -55,8 +42,7 @@ dependencies {
     compile "javax.inject:javax.inject:1"
 
     // utils
-    compile "org.projectlombok:lombok:1.16.18"
-    compile "com.google.guava:guava:23.0"
+    compile "org.projectlombok:lombok:1.16.20"
 
     // json
     compile "com.google.code.gson:gson:2.8.1"
