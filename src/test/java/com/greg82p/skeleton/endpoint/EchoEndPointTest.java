@@ -9,10 +9,12 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,21 +26,19 @@ import com.google.gson.Gson;
 import com.greg82p.skeleton.config.CoreConfig;
 import com.greg82p.skeleton.config.MvcConfig;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CoreConfig.class, MvcConfig.class })
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@WebMvcTest(EchoEndPoint.class)
 public class EchoEndPointTest {
 
-	@Inject
-	WebApplicationContext context;
+	@Autowired
+	private MockMvc mvc;
 
 	@Test
 	public void test_echoEndPoint() throws Exception {
 		// Given
-		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
 		// When
-		ResultActions resultActions = mockMvc.perform(post("/echo").content("hello"));
+		ResultActions resultActions = mvc.perform(post("/echo").content("hello"));
 
 		// Then
 		MvcResult result = resultActions.andExpect(status().isOk()).andReturn();
@@ -48,13 +48,12 @@ public class EchoEndPointTest {
 	@Test
 	public void test_jsonEcho() throws Exception {
 		// Given
-		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
 		EchoEndPoint.JsonRequest jsonRequest = new EchoEndPoint.JsonRequest("message");
 		String request = new Gson().toJson(jsonRequest);
 
 		// When
-		ResultActions resultActions = mockMvc.perform(post("/jsonecho")
+		ResultActions resultActions = mvc.perform(post("/jsonecho")
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(request));
